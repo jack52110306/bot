@@ -18,6 +18,8 @@ line_bot_api = LineBotApi('6sOa+OnuPnspMTtDeTPTNPppPkdBfBN/KAuxkFA6/j9yipl6XFxqy
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('d63c55b9cfbd93b271d1864de01dd4a3')
 
+line_bot_api.push_message('Uc9435ce72f8d955afdd36a170269f9ed', TextSendMessage(text='你可以開始了'))
+
 # 氣象預報函式
 def forecast(address):
     area_list = {}
