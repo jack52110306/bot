@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #載入LineBot所需要的套件
 from flask import Flask, request, abort
 
@@ -21,6 +19,33 @@ line_bot_api = LineBotApi('6sOa+OnuPnspMTtDeTPTNPppPkdBfBN/KAuxkFA6/j9yipl6XFxqy
 handler = WebhookHandler('d63c55b9cfbd93b271d1864de01dd4a3')
 
 line_bot_api.push_message('Uc9435ce72f8d955afdd36a170269f9ed', TextSendMessage(text='你可以開始了'))
+
+@app.route("/", methods=['POST'])
+def linebot():
+    body = request.get_data(as_text=True)    # 取得收到的訊息內容
+    try:
+        signature = request.headers['X-Line-Signature']             # 加入回傳的 headers
+        handler.handle(body, signature)      # 綁定訊息回傳的相關資訊
+        json_data = json.loads(body)         # 轉換內容為 json 格式
+        reply_token = json_data['events'][0]['replyToken']
+        user_id = json_data['events'][0]['source']['userId']
+        print(json_data)                     # 印出內容
+        if 'message' in json_data['events'][0]:
+            if json_data['events'][0]['message']['type'] == 'location':
+                address = json_data['events'][0]['message']['address'].replace('台','臺')
+                # 回覆爬取到的相關氣象資訊
+                reply_message(f'{address}\n\n{current_weather(address)}', reply_token, line_bot_api)
+                print(address)
+    except:
+        print('error')                       # 如果發生錯誤，印出 error
+    return 'OK'                              # 驗證 Webhook 使用，不能省略
+
+
+#主程式
+import os
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
 
 # 目前天氣函式
 def current_weather(address):
@@ -80,9 +105,14 @@ def current_weather(address):
         return msg    # 回傳 msg
     except:
         return msg    # 如果取資料有發生錯誤，直接回傳 msg
-
-#主程式
-import os
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+def reply_message(msg, rk, token):
+    headers = {'Authorization':f'Bearer {token}','Content-Type':'application/json'}
+    body = {
+    'replyToken':rk,
+    'messages':[{
+            "type": "text",
+            "text": msg
+        }]
+    }
+    req = requests.request('POST', 'https://api.line.me/v2/bot/message/reply', headers=headers,data=json.dumps(body).encode('utf-8'))
+    print(req.text)
