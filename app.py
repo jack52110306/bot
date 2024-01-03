@@ -36,7 +36,7 @@ cities = ['基隆市','嘉義市','臺北市','嘉義縣','新北市','臺南市
 
 def get(city):
     token = 'CWA-A6AD0826-313E-41D5-AE53-3742E1898790'
-    url = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWA-A6AD0826-313E-41D5-AE53-3742E1898790&format=JSON' + token + '&format=JSON&locationName=' + str(city)
+    url = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWA-A6AD0826-313E-41D5-AE53-3742E1898790&format=JSON'
     Data = requests.get(url)
     Data = (json.loads(Data.text,encoding='utf-8'))['records']['location'][0]['weatherElement']
     res = [[] , [] , []]
