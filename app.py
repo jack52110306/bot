@@ -20,6 +20,7 @@ line_bot_api = LineBotApi('6sOa+OnuPnspMTtDeTPTNPppPkdBfBN/KAuxkFA6/j9yipl6XFxqy
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('d63c55b9cfbd93b271d1864de01dd4a3')
 access_token = '6sOa+OnuPnspMTtDeTPTNPppPkdBfBN/KAuxkFA6/j9yipl6XFxqyh7ZYANJj/+oRSnkeBV+22N7hebj1hS1k7PZBBPX71dWnglgZTHM4ccW+OPt3YV/aH8rpTEopFBfCWYTJY3bVGbjEhfA74OzCQdB04t89/1O/w1cDnyilFU='
+line_bot_api.push_message('Uc9435ce72f8d955afdd36a170269f9ed', TextSendMessage(text='你可以開始了'))
 
 @app.route("/callback", methods=['POST'])
 def callback():
