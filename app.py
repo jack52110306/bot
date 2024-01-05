@@ -48,9 +48,9 @@ def scrape(city):
 
         soup = BeautifulSoup(response.content, "html.parser")
 
-        # 爬取前五筆餐廳卡片資料
+        # 爬取前十筆餐廳卡片資料
         cards = soup.find_all(
-            'div', {'class': 'jsx-1309326380 restaurant-info'}, limit=5)
+            'div', {'class': 'jsx-1309326380 restaurant-info'}, limit=10)
 
         content = ""
         for card in cards:
